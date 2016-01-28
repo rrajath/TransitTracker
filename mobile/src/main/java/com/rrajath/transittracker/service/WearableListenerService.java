@@ -1,7 +1,6 @@
 package com.rrajath.transittracker.service;
 
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -18,12 +17,13 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class WearableListenerService extends com.google.android.gms.wearable.WearableListenerService {
 
     @Inject
     WearableListenerServicePresenter presenter;
 
-    public static final String TAG = "DataLayer";
     public static final String NEARBY_PATH = "/nearby";
     public static final String FAVORITES_PATH = "/favorites";
 
@@ -40,9 +40,7 @@ public class WearableListenerService extends com.google.android.gms.wearable.Wea
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "onMessageReceived: " + messageEvent);
-        }
+        Timber.d("onMessageReceived: " + messageEvent);
 
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
@@ -51,7 +49,7 @@ public class WearableListenerService extends com.google.android.gms.wearable.Wea
         ConnectionResult connectionResult = googleApiClient.blockingConnect(30, TimeUnit.SECONDS);
 
         if (!connectionResult.isSuccess()) {
-            Log.e(TAG, "Failed to connect to GoogleApiClient");
+            Timber.e("Failed to connect to GoogleApiClient");
             return;
         }
 
