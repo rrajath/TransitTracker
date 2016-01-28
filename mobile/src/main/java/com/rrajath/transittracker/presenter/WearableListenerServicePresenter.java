@@ -18,7 +18,6 @@ public class WearableListenerServicePresenter {
     }
 
     public void handleOnGetStopsForLocation() {
-        Timber.d("In handleOnGetStopsForLocation");
         mStopsManager.getStopsForLocation(47.5990281, -122.3277492, 150)
                 .subscribe(new SimpleObserver<ImmutableList<WearStop>>() {
                     @Override

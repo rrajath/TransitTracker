@@ -32,7 +32,6 @@ public class WearableListenerService extends com.google.android.gms.wearable.Wea
     @Override
     public void onCreate() {
         super.onCreate();
-//        ((TransitTrackerApplication) getApplication()).getTransitApiComponent().inject(this);
         TransitTrackerApplication.get(this)
                 .getComponent()
                 .plus(new WearableListenerServiceModule(this))
@@ -58,16 +57,13 @@ public class WearableListenerService extends com.google.android.gms.wearable.Wea
 
         if (messageEvent.getPath().equals(NEARBY_PATH)) {
             Handler handler = new Handler(getMainLooper());
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(WearableListenerService.this, "Nearby clicked on wear", Toast.LENGTH_SHORT).show();
-                    // Call API to get stops for current location
-                    presenter.handleOnGetStopsForLocation();
-                    // Send the populated list to wear
-                    if (!nearbyStopsForWear.isEmpty()) {
-                        Toast.makeText(WearableListenerService.this, "Got the stops", Toast.LENGTH_SHORT).show();
-                    }
+            handler.post(() -> {
+                Toast.makeText(WearableListenerService.this, "Nearby clicked on wear", Toast.LENGTH_SHORT).show();
+                // Call API to get stops for current location
+                presenter.handleOnGetStopsForLocation();
+                // Send the populated list to wear
+                if (!nearbyStopsForWear.isEmpty()) {
+                    Toast.makeText(WearableListenerService.this, "Got the stops", Toast.LENGTH_SHORT).show();
                 }
             });
 

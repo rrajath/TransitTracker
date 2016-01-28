@@ -9,7 +9,6 @@ import com.rrajath.transittracker.network.interfaces.TransitApiService;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -23,23 +22,20 @@ public class StopsManager {
     public Observable<ImmutableList<WearStop>> getStopsForLocation(final double latitude, final double longitude, final int radius) {
         Observable<StopsForLocationOutput> stopsForLocationOutputObservable = transitApiService.getStopsForLocation(latitude, longitude, radius);
         return stopsForLocationOutputObservable
-                .map(new Func1<StopsForLocationOutput, ImmutableList<WearStop>>() {
-                    @Override
-                    public ImmutableList<WearStop> call(StopsForLocationOutput stopsForLocationOutput) {
-                        ImmutableList.Builder<WearStop> builder = ImmutableList.builder();
-                        Timber.d(stopsForLocationOutput.toString());
-                        Data data = stopsForLocationOutput.data;
-                        for (Stop stop : data.list) {
-                            WearStop wearStop = new WearStop();
-                            wearStop.name = stop.name;
-                            wearStop.code = stop.code;
-                            wearStop.direction = stop.direction;
-                            wearStop.routeIds = stop.routeIds;
+                .map(stopsForLocationOutput -> {
+                    ImmutableList.Builder<WearStop> builder = ImmutableList.builder();
+                    Timber.d(stopsForLocationOutput.toString());
+                    Data data = stopsForLocationOutput.data;
+                    for (Stop stop : data.list) {
+                        WearStop wearStop = new WearStop();
+                        wearStop.name = stop.name;
+                        wearStop.code = stop.code;
+                        wearStop.direction = stop.direction;
+                        wearStop.routeIds = stop.routeIds;
 
-                            builder.add(wearStop);
-                        }
-                        return builder.build();
+                        builder.add(wearStop);
                     }
+                    return builder.build();
                 }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
