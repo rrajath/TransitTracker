@@ -1,18 +1,13 @@
 package com.rrajath.transittracker.service;
 
 import android.Manifest;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -22,12 +17,11 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.google.common.collect.ImmutableList;
-import com.rrajath.transittracker.R;
 import com.rrajath.transittracker.TransitTrackerApplication;
 import com.rrajath.transittracker.data.WearStop;
 import com.rrajath.transittracker.di.module.TransitTrackerServiceModule;
 import com.rrajath.transittracker.presenter.TransitTrackerServicePresenter;
-import com.rrajath.transittracker.ui.activity.PermissionsActivity;
+import com.rrajath.transittracker.util.PermissionUtils;
 
 import javax.inject.Inject;
 
@@ -99,30 +93,12 @@ public class TransitTrackerService extends WearableListenerService implements
         Timber.d("Connected");
         // Check permissions and send notification (if needed)
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            showPermissionsNotification();
+            PermissionUtils.showPermissionsNotification(this);
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             Timber.d(String.format("Lat: %s, Lon: %s", mLastLocation.getLatitude(), mLastLocation.getLongitude()));
         }
-    }
-
-    private void showPermissionsNotification() {
-        Intent intent = new Intent(this, PermissionsActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notifications)
-                .setContentTitle("Transit Tracker Permissions Request")
-                .setContentText("Requesting location permissions")
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-
-        int notificationId = 1;
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(notificationId, builder.build());
     }
 
     @Override
