@@ -20,22 +20,24 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.WearableListenerService;
 import com.google.common.collect.ImmutableList;
 import com.rrajath.transittracker.R;
 import com.rrajath.transittracker.TransitTrackerApplication;
 import com.rrajath.transittracker.data.WearStop;
-import com.rrajath.transittracker.di.module.WearableListenerServiceModule;
-import com.rrajath.transittracker.presenter.WearableListenerServicePresenter;
+import com.rrajath.transittracker.di.module.TransitTrackerServiceModule;
+import com.rrajath.transittracker.presenter.TransitTrackerServicePresenter;
 import com.rrajath.transittracker.ui.activity.PermissionsActivity;
 
 import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class WearableListenerService extends com.google.android.gms.wearable.WearableListenerService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class TransitTrackerService extends WearableListenerService implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     @Inject
-    WearableListenerServicePresenter presenter;
+    TransitTrackerServicePresenter presenter;
 
     public static final String NEARBY_PATH = "/nearby";
     public static final String FAVORITES_PATH = "/favorites";
@@ -50,7 +52,7 @@ public class WearableListenerService extends com.google.android.gms.wearable.Wea
         mGoogleApiClient.connect();
         TransitTrackerApplication.get(this)
                 .getComponent()
-                .plus(new WearableListenerServiceModule(this))
+                .plus(new TransitTrackerServiceModule(this))
                 .inject(this);
         super.onCreate();
     }
@@ -73,12 +75,12 @@ public class WearableListenerService extends com.google.android.gms.wearable.Wea
         if (messageEvent.getPath().equals(NEARBY_PATH)) {
             Handler handler = new Handler(getMainLooper());
             handler.post(() -> {
-                Toast.makeText(WearableListenerService.this, "Nearby clicked on wear", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TransitTrackerService.this, "Nearby clicked on wear", Toast.LENGTH_SHORT).show();
                 // Call API to get stops for current location
                 presenter.handleOnGetStopsForLocation();
                 // Send the populated list to wear
                 if (!nearbyStopsForWear.isEmpty()) {
-                    Toast.makeText(WearableListenerService.this, "Got the stops", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TransitTrackerService.this, "Got the stops", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -86,7 +88,7 @@ public class WearableListenerService extends com.google.android.gms.wearable.Wea
 
         if (messageEvent.getPath().equals(FAVORITES_PATH)) {
             Handler handler = new Handler(getMainLooper());
-            handler.post(() -> Toast.makeText(WearableListenerService.this, "Favorites clicked on wear", Toast.LENGTH_SHORT).show());
+            handler.post(() -> Toast.makeText(TransitTrackerService.this, "Favorites clicked on wear", Toast.LENGTH_SHORT).show());
         }
     }
 

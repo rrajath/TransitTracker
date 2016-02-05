@@ -10,7 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import com.rrajath.transittracker.TransitTrackerApplication;
-import com.rrajath.transittracker.service.WearableListenerService;
+import com.rrajath.transittracker.service.TransitTrackerService;
 
 public class PermissionsActivity extends Activity {
 
@@ -26,7 +26,7 @@ public class PermissionsActivity extends Activity {
         switch (requestCode) {
             case TransitTrackerApplication.USER_PERMISSION_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startService(new Intent(this, WearableListenerService.class));
+                    startService(new Intent(this, TransitTrackerService.class));
                     finish();
                 } else {
                     Toast.makeText(PermissionsActivity.this, "Please accept permissions", Toast.LENGTH_SHORT).show();

@@ -3,16 +3,16 @@ package com.rrajath.transittracker.presenter;
 import com.google.common.collect.ImmutableList;
 import com.rrajath.transittracker.data.WearStop;
 import com.rrajath.transittracker.network.StopsManager;
-import com.rrajath.transittracker.service.WearableListenerService;
+import com.rrajath.transittracker.service.TransitTrackerService;
 import com.rrajath.transittracker.util.SimpleObserver;
 
 import timber.log.Timber;
 
-public class WearableListenerServicePresenter {
-    WearableListenerService service;
+public class TransitTrackerServicePresenter {
+    TransitTrackerService service;
     StopsManager mStopsManager;
 
-    public WearableListenerServicePresenter(WearableListenerService service, StopsManager stopsManager) {
+    public TransitTrackerServicePresenter(TransitTrackerService service, StopsManager stopsManager) {
         this.service = service;
         this.mStopsManager = stopsManager;
     }

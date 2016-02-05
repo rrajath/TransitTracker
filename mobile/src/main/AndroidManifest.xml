@@ -12,7 +12,7 @@
                  android:name=".TransitTrackerApplication">
         <activity android:name=".ui.activity.PermissionsActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-        <service android:name=".service.WearableListenerService">
+        <service android:name=".service.TransitTrackerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
             </intent-filter>

@@ -1,7 +1,7 @@
 package com.rrajath.transittracker;
 
-import com.rrajath.transittracker.di.component.WearableListenerServiceComponent;
-import com.rrajath.transittracker.di.module.WearableListenerServiceModule;
+import com.rrajath.transittracker.di.component.TransitTrackerServiceComponent;
+import com.rrajath.transittracker.di.module.TransitTrackerServiceModule;
 import com.rrajath.transittracker.di.module.NetworkModule;
 import com.rrajath.transittracker.di.module.TransitApiModule;
 
@@ -18,6 +18,6 @@ import dagger.Component;
         }
 )
 public interface AppComponent {
-    WearableListenerServiceComponent plus(WearableListenerServiceModule wearableListenerServiceModule);
+    TransitTrackerServiceComponent plus(TransitTrackerServiceModule transitTrackerServiceModule);
 //    TransitApiComponent plus(TransitApiModule transitApiModule);
 }
