@@ -116,7 +116,8 @@ public class WearableListenerService extends com.google.android.gms.wearable.Wea
                 .setContentTitle("Transit Tracker Permissions Request")
                 .setContentText("Requesting location permissions")
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
 
         int notificationId = 1;
 

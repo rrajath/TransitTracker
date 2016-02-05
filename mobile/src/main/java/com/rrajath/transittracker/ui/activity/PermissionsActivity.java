@@ -27,6 +27,7 @@ public class PermissionsActivity extends Activity {
             case TransitTrackerApplication.USER_PERMISSION_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startService(new Intent(this, WearableListenerService.class));
+                    finish();
                 } else {
                     Toast.makeText(PermissionsActivity.this, "Please accept permissions", Toast.LENGTH_SHORT).show();
                 }
