@@ -70,8 +70,6 @@ public class TransitTrackerService extends WearableListenerService implements
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        Timber.d("onMessageReceived: " + messageEvent);
-
         if (messageEvent.getPath().equals(NEARBY_PATH)) {
             Handler handler = new Handler(getMainLooper());
             handler.post(() -> {

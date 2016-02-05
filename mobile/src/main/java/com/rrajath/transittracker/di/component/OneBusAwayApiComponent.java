@@ -1,20 +1,20 @@
 package com.rrajath.transittracker.di.component;
 
-import com.rrajath.transittracker.di.module.TransitApiModule;
+import com.rrajath.transittracker.di.module.OneBusAwayApiModule;
 import com.rrajath.transittracker.di.scope.UserScope;
 import com.rrajath.transittracker.network.StopsManager;
-import com.rrajath.transittracker.network.interfaces.TransitApiService;
+import com.rrajath.transittracker.network.interfaces.OneBusAwayApiService;
 
 import dagger.Subcomponent;
 
 @UserScope
 @Subcomponent (
         modules = {
-                TransitApiModule.class
+                OneBusAwayApiModule.class
         }
 )
-public interface TransitApiComponent {
+public interface OneBusAwayApiComponent {
     StopsManager inject(StopsManager stopsManager);
 
-    TransitApiService service();
+    OneBusAwayApiService service();
 }

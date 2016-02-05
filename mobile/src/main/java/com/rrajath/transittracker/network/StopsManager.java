@@ -5,21 +5,21 @@ import com.rrajath.transittracker.data.WearStop;
 import com.rrajath.transittracker.data.api.model.Data;
 import com.rrajath.transittracker.data.api.model.Stop;
 import com.rrajath.transittracker.data.api.response.StopsForLocationOutput;
-import com.rrajath.transittracker.network.interfaces.TransitApiService;
+import com.rrajath.transittracker.network.interfaces.OneBusAwayApiService;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class StopsManager {
-    TransitApiService transitApiService;
+    OneBusAwayApiService mOneBusAwayApiService;
 
-    public StopsManager(TransitApiService transitApiService) {
-        this.transitApiService = transitApiService;
+    public StopsManager(OneBusAwayApiService oneBusAwayApiService) {
+        this.mOneBusAwayApiService = oneBusAwayApiService;
     }
 
     public Observable<ImmutableList<WearStop>> getStopsForLocation(final double latitude, final double longitude, final int radius) {
-        Observable<StopsForLocationOutput> stopsForLocationOutputObservable = transitApiService.getStopsForLocation(latitude, longitude, radius);
+        Observable<StopsForLocationOutput> stopsForLocationOutputObservable = mOneBusAwayApiService.getStopsForLocation(latitude, longitude, radius);
         return stopsForLocationOutputObservable
                 .map(stopsForLocationOutput -> {
                     ImmutableList.Builder<WearStop> builder = ImmutableList.builder();

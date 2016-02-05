@@ -6,7 +6,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
 
-public interface TransitApiService {
+public interface OneBusAwayApiService {
     @GET("/api/where/stops-for-location.json?key=TEST")
     Observable<StopsForLocationOutput> getStopsForLocation(
             @Query("lat") double latitude,
