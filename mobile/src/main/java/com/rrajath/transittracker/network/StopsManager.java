@@ -10,7 +10,6 @@ import com.rrajath.transittracker.network.interfaces.TransitApiService;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class StopsManager {
     TransitApiService transitApiService;
@@ -24,7 +23,6 @@ public class StopsManager {
         return stopsForLocationOutputObservable
                 .map(stopsForLocationOutput -> {
                     ImmutableList.Builder<WearStop> builder = ImmutableList.builder();
-                    Timber.d(stopsForLocationOutput.toString());
                     Data data = stopsForLocationOutput.data;
                     for (Stop stop : data.list) {
                         WearStop wearStop = new WearStop();

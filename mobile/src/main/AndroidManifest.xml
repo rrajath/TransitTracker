@@ -2,12 +2,16 @@
           package="com.rrajath.transittracker">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application android:allowBackup="true"
                  android:label="@string/app_name"
                  android:icon="@mipmap/ic_launcher"
                  android:theme="@style/AppTheme"
                  android:name=".TransitTrackerApplication">
+        <activity android:name=".ui.activity.PermissionsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <service android:name=".service.WearableListenerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>

@@ -33,7 +33,7 @@ public class NetworkModule {
     @Provides
     @Singleton
     HttpLoggingInterceptor provideHttpLoggingInterceptor() {
-        return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+        return new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC);
     }
 
     @Provides

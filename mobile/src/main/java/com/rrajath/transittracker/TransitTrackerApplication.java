@@ -11,6 +11,7 @@ public class TransitTrackerApplication extends Application {
 
     AppComponent mAppComponent;
     private static final String ONEBUSAWAY_API_ENDPOINT = "http://api.pugetsound.onebusaway.org";
+    public static final int USER_PERMISSION_LOCATION = 1;
 
     @Override
     public void onCreate() {
