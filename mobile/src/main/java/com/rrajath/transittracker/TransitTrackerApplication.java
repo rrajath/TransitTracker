@@ -3,7 +3,11 @@ package com.rrajath.transittracker;
 import android.app.Application;
 import android.content.Context;
 
+import com.rrajath.transittracker.di.component.DaggerTransitTrackerServiceComponent;
+import com.rrajath.transittracker.di.component.TransitTrackerServiceComponent;
 import com.rrajath.transittracker.di.module.NetworkModule;
+import com.rrajath.transittracker.di.module.TransitTrackerServiceModule;
+import com.rrajath.transittracker.service.TransitTrackerService;
 
 import timber.log.Timber;
 
@@ -27,11 +31,18 @@ public class TransitTrackerApplication extends Application {
                 .build();
     }
 
-    public AppComponent getComponent() {
+    public AppComponent getAppComponent() {
         return mAppComponent;
     }
 
     public static TransitTrackerApplication get(Context context) {
         return (TransitTrackerApplication) context.getApplicationContext();
+    }
+
+    public TransitTrackerServiceComponent createTransitTrackerServiceComponent(TransitTrackerService service) {
+        return DaggerTransitTrackerServiceComponent.builder()
+                .appComponent(mAppComponent)
+                .transitTrackerServiceModule(new TransitTrackerServiceModule(service))
+                .build();
     }
 }

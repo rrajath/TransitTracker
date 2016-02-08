@@ -6,6 +6,8 @@ import com.rrajath.transittracker.network.StopsManager;
 import com.rrajath.transittracker.service.TransitTrackerService;
 import com.rrajath.transittracker.util.SimpleObserver;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class TransitTrackerServicePresenter {
@@ -19,12 +21,13 @@ public class TransitTrackerServicePresenter {
 
     public void handleOnGetStopsForLocation() {
         mStopsManager.getStopsForLocation(47.5990281, -122.3277492, 150)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<ImmutableList<WearStop>>() {
                     @Override
                     public void onNext(ImmutableList<WearStop> wearStops) {
                         super.onNext(wearStops);
                         Timber.d("Number of wearStops returned: " + wearStops.size());
-                        service.setStopsForLocation(wearStops);
                     }
 
                     @Override

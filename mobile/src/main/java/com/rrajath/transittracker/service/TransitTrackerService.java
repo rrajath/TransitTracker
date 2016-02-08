@@ -1,30 +1,26 @@
 package com.rrajath.transittracker.service;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.google.common.collect.ImmutableList;
 import com.rrajath.transittracker.TransitTrackerApplication;
 import com.rrajath.transittracker.data.WearStop;
-import com.rrajath.transittracker.di.module.TransitTrackerServiceModule;
+import com.rrajath.transittracker.network.StopsManager;
 import com.rrajath.transittracker.presenter.TransitTrackerServicePresenter;
-import com.rrajath.transittracker.util.PermissionUtils;
+import com.rrajath.transittracker.util.LocationUtils;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import timber.log.Timber;
 
 public class TransitTrackerService extends WearableListenerService implements
@@ -32,39 +28,40 @@ public class TransitTrackerService extends WearableListenerService implements
 
     @Inject
     TransitTrackerServicePresenter presenter;
+    @Inject
+    StopsManager mStopsManager;
+    @Inject
+    LocationUtils mLocationUtils;
+    @Inject
+    GoogleApiClient mGoogleApiClient;
 
     public static final String NEARBY_PATH = "/nearby";
     public static final String FAVORITES_PATH = "/favorites";
 
-    private ImmutableList<WearStop> nearbyStopsForWear = new ImmutableList.Builder<WearStop>().build();
-    private GoogleApiClient mGoogleApiClient;
+    private Observable<ImmutableList<WearStop>> nearbyStopsForWear;
     private Location mLastLocation;
 
     @Override
     public void onCreate() {
-        buildGoogleApiClient();
-        mGoogleApiClient.connect();
         TransitTrackerApplication.get(this)
-                .getComponent()
-                .plus(new TransitTrackerServiceModule(this))
+                .createTransitTrackerServiceComponent(this)
                 .inject(this);
+        buildGoogleApiClient();
+        Timber.d("Calling mLocationUtils.getCurrentLocation");
+        mLastLocation = mLocationUtils.getCurrentLocation(this);
         super.onCreate();
     }
 
     private void buildGoogleApiClient() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Wearable.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
+        mGoogleApiClient.registerConnectionCallbacks(this);
+        mGoogleApiClient.registerConnectionFailedListener(this);
+        mGoogleApiClient.connect();
     }
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equals(NEARBY_PATH)) {
+/*
             Handler handler = new Handler(getMainLooper());
             handler.post(() -> {
                 Toast.makeText(TransitTrackerService.this, "Nearby clicked on wear", Toast.LENGTH_SHORT).show();
@@ -75,7 +72,13 @@ public class TransitTrackerService extends WearableListenerService implements
                     Toast.makeText(TransitTrackerService.this, "Got the stops", Toast.LENGTH_SHORT).show();
                 }
             });
+*/
 
+            if (mLastLocation == null) {
+                mLastLocation = mLocationUtils.getCurrentLocation(this);
+            }
+            nearbyStopsForWear = mStopsManager.getStopsForLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 150);
+            Timber.d("Nearby stops for wear: " + nearbyStopsForWear);
         }
 
         if (messageEvent.getPath().equals(FAVORITES_PATH)) {
@@ -84,21 +87,9 @@ public class TransitTrackerService extends WearableListenerService implements
         }
     }
 
-    public void setStopsForLocation(ImmutableList<WearStop> wearStops) {
-        nearbyStopsForWear = wearStops;
-    }
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Timber.d("Connected");
-        // Check permissions and send notification (if needed)
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            PermissionUtils.showPermissionsNotification(this);
-        }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            Timber.d(String.format("Lat: %s, Lon: %s", mLastLocation.getLatitude(), mLastLocation.getLongitude()));
-        }
     }
 
     @Override
@@ -114,6 +105,8 @@ public class TransitTrackerService extends WearableListenerService implements
     @Override
     public void onDestroy() {
         if (mGoogleApiClient != null) {
+            mGoogleApiClient.unregisterConnectionCallbacks(this);
+            mGoogleApiClient.unregisterConnectionFailedListener(this);
             mGoogleApiClient.disconnect();
         }
         super.onDestroy();

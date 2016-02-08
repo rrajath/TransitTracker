@@ -10,6 +10,7 @@ import com.rrajath.transittracker.network.interfaces.OneBusAwayApiService;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class StopsManager {
     OneBusAwayApiService mOneBusAwayApiService;
@@ -24,6 +25,7 @@ public class StopsManager {
                 .map(stopsForLocationOutput -> {
                     ImmutableList.Builder<WearStop> builder = ImmutableList.builder();
                     Data data = stopsForLocationOutput.data;
+                    Timber.d("List of stops: " + data.list.size());
                     for (Stop stop : data.list) {
                         WearStop wearStop = new WearStop();
                         wearStop.name = stop.name;

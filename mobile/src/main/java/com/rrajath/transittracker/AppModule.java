@@ -1,6 +1,13 @@
 package com.rrajath.transittracker;
 
 import android.app.Application;
+import android.content.Context;
+import android.location.LocationManager;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.wearable.Wearable;
+import com.rrajath.transittracker.util.LocationUtils;
 
 import javax.inject.Singleton;
 
@@ -19,5 +26,32 @@ public class AppModule {
     @Singleton
     Application providesApplication() {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    LocationUtils providesLocationUtils(GoogleApiClient googleApiClient, LocationManager locationManager) {
+        return new LocationUtils(googleApiClient, locationManager);
+    }
+
+    @Provides
+    @Singleton
+    GoogleApiClient providesGoogleApiClient(Application application) {
+        return new GoogleApiClient.Builder(application)
+                .addApi(Wearable.API)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    LocationManager providesLocationManager() {
+        return (LocationManager) application.getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    Context providesApplicationContext() {
+        return application.getApplicationContext();
     }
 }

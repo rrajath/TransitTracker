@@ -1,9 +1,10 @@
 package com.rrajath.transittracker;
 
-import com.rrajath.transittracker.di.component.TransitTrackerServiceComponent;
-import com.rrajath.transittracker.di.module.TransitTrackerServiceModule;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.rrajath.transittracker.di.module.NetworkModule;
 import com.rrajath.transittracker.di.module.OneBusAwayApiModule;
+import com.rrajath.transittracker.network.StopsManager;
+import com.rrajath.transittracker.util.LocationUtils;
 
 import javax.inject.Singleton;
 
@@ -18,6 +19,9 @@ import dagger.Component;
         }
 )
 public interface AppComponent {
-    TransitTrackerServiceComponent plus(TransitTrackerServiceModule transitTrackerServiceModule);
+//    TransitTrackerServiceComponent plus(TransitTrackerServiceModule transitTrackerServiceModule);
 //    OneBusAwayApiComponent plus(OneBusAwayApiModule oneBusAwayApiModule);
+    StopsManager stopsManager();
+    LocationUtils locationUtils();
+    GoogleApiClient googleApiClient();
 }
