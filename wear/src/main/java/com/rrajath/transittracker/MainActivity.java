@@ -1,7 +1,9 @@
 package com.rrajath.transittracker;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.wearable.view.WearableListView;
 import android.view.View;
 import android.view.WindowInsets;
@@ -9,6 +11,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.data.FreezableUtils;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
@@ -21,12 +29,18 @@ import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
-public class MainActivity extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, WearableListView.ClickListener, MessageApi.MessageListener {
+public class MainActivity extends Activity implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        WearableListView.ClickListener,
+        MessageApi.MessageListener,
+        DataApi.DataListener {
 
     private WearableListView mainMenuList;
     GoogleApiClient mGoogleApiClient;
     private String nodeId;
     private List<MainMenuItem> mainMenuItems;
+    private static final String STOPS_LIST_PATH = "stopsList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +119,8 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     @Override
     protected void onStop() {
+        Wearable.MessageApi.removeListener(mGoogleApiClient, this);
+        Wearable.DataApi.removeListener(mGoogleApiClient, this);
         mGoogleApiClient.disconnect();
         super.onStop();
     }
@@ -126,6 +142,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     @Override
     public void onConnected(Bundle bundle) {
         Wearable.MessageApi.addListener(mGoogleApiClient, this);
+        Wearable.DataApi.addListener(mGoogleApiClient, this);
     }
 
     @Override
@@ -134,14 +151,13 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Timber.d(String.format("connection to Google API Client failed with status code: %d and " +
                 "reason: %s", connectionResult.getErrorCode(), connectionResult.getErrorMessage()));
     }
 
     @Override
     public void onClick(WearableListView.ViewHolder viewHolder) {
-        Integer tag = (Integer) viewHolder.itemView.getTag();
         Toast.makeText(MainActivity.this, "Clicked!", Toast.LENGTH_SHORT).show();
         String path = "/" + mainMenuItems.get(viewHolder.getLayoutPosition()).title.toLowerCase();
         Timber.d("PATH on wear: " + path);
@@ -155,7 +171,9 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-
+        if (messageEvent.getPath().equals(STOPS_LIST_PATH)) {
+            Toast.makeText(MainActivity.this, "Got the list", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void sendToast(final String path) {
@@ -169,6 +187,23 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
             }).start();
         } else {
             Toast.makeText(MainActivity.this, "No connected device found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEvents) {
+        List<DataEvent> events = FreezableUtils.freezeIterable(dataEvents);
+        Timber.d("Events: " + events.toString());
+        for (DataEvent dataEvent : events) {
+            Uri uri = dataEvent.getDataItem().getUri();
+            String path = uri.getPath();
+            if (path.equals("/returned-nearby-wear-stops")) {
+                DataMap dataMap = DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap();
+                Timber.d(dataMap.getString("name"));
+                Timber.d(dataMap.getString("direction"));
+                Timber.d(dataMap.getString("code"));
+                Toast.makeText(MainActivity.this, dataMap.getString("name"), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

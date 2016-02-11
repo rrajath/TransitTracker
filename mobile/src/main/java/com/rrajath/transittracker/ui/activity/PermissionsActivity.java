@@ -19,11 +19,13 @@ public class PermissionsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+/*
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             showMessageOKCancel("You need to allow permissions to access location",
                     (dialogInterface, i) -> ActivityCompat.requestPermissions(PermissionsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, TransitTrackerApplication.USER_PERMISSION_LOCATION));
             return;
         }
+*/
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, TransitTrackerApplication.USER_PERMISSION_LOCATION);
     }
 
@@ -39,6 +41,11 @@ public class PermissionsActivity extends Activity {
                 finish();
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener listener) {

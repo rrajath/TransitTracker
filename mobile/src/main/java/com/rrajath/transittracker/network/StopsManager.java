@@ -27,11 +27,7 @@ public class StopsManager {
                     Data data = stopsForLocationOutput.data;
                     Timber.d("List of stops: " + data.list.size());
                     for (Stop stop : data.list) {
-                        WearStop wearStop = new WearStop();
-                        wearStop.name = stop.name;
-                        wearStop.code = stop.code;
-                        wearStop.direction = stop.direction;
-                        wearStop.routeIds = stop.routeIds;
+                        WearStop wearStop = new WearStop(stop.name, stop.direction, stop.routeIds, stop.code);
 
                         builder.add(wearStop);
                     }
