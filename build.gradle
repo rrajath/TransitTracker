@@ -19,3 +19,27 @@ allprojects {
         jcenter()
     }
 }
+
+ext {
+    compileSdkVersion = 23
+    buildToolsVersion = '23.0.2'
+
+    supportLibVersion = '23.1.1'
+    playServicesWearableVersion = '8.4.0'
+    playServicesLocationVersion = '8.4.0'
+
+    daggerVersion = '2.0'
+    daggerCompilerVersion = '2.0'
+    javaxAnnotationVersion = '10.0-b28'
+    timberVersion = '3.1.0'
+
+    supportLibAppCompat = "com.android.support:appcompat-v7:$supportLibVersion"
+    playServicesWearable = "com.google.android.gms:play-services-wearable:$playServicesWearableVersion"
+    playServicesLocation = "com.google.android.gms:play-services-location:$playServicesLocationVersion"
+
+    dagger = "com.google.dagger:dagger:$daggerVersion"
+    daggerCompiler = "com.google.dagger:dagger-compiler:$daggerCompilerVersion"
+    javaxAnnotation = "org.glassfish:javax.annotation:$javaxAnnotationVersion"
+
+    timber = "com.jakewharton.timber:timber:$timberVersion"
+}

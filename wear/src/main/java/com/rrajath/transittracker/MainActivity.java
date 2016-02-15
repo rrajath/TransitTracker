@@ -22,6 +22,11 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
+import com.rrajath.shared.model.WearStop;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,6 +177,19 @@ public class MainActivity extends Activity implements
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equals(STOPS_LIST_PATH)) {
+            byte[] bytes = messageEvent.getData();
+            try {
+                JSONArray jsonArray = new JSONArray(new String(bytes));
+                JSONObject jsonObject;
+                List<WearStop> wearStops = new ArrayList<>();
+                for (int i=0; i<jsonArray.length(); i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    wearStops.add(WearStop.fromJSON(jsonObject));
+                }
+                Timber.d("Final WearStops List: " + wearStops.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             Toast.makeText(MainActivity.this, "Got the list", Toast.LENGTH_SHORT).show();
         }
     }

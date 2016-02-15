@@ -4,8 +4,8 @@ apply plugin: 'me.tatarka.retrolambda'
 
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.rrajath.transittracker"
@@ -31,20 +31,23 @@ android {
 }
 
 dependencies {
+    compile project(path: ':shared')
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     wearApp project(':wear')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.google.android.gms:play-services-wearable:8.4.0'
-    compile "com.google.android.gms:play-services-location:8.4.0"
+
+    compile rootProject.ext.supportLibAppCompat
+    compile rootProject.ext.playServicesWearable
+    compile rootProject.ext.playServicesLocation
 
     // Dependency Injection
-    compile 'com.google.dagger:dagger:2.0'
-    provided 'com.google.dagger:dagger-compiler:2.0'
-    provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile rootProject.ext.dagger
+    provided rootProject.ext.daggerCompiler
+    provided rootProject.ext.javaxAnnotation
 
     // Logging
-    compile 'com.jakewharton.timber:timber:3.1.0'
+    compile rootProject.ext.timber
 
     // rxJava and rxAndroid
     compile 'io.reactivex:rxandroid:1.1.0'

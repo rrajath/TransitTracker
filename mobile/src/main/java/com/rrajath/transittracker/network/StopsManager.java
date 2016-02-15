@@ -1,7 +1,7 @@
 package com.rrajath.transittracker.network;
 
 import com.google.common.collect.ImmutableList;
-import com.rrajath.transittracker.data.WearStop;
+import com.rrajath.shared.model.WearStop;
 import com.rrajath.transittracker.data.api.model.Data;
 import com.rrajath.transittracker.data.api.model.Stop;
 import com.rrajath.transittracker.data.api.response.StopsForLocationOutput;
