@@ -13,9 +13,7 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
-import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
-import com.rrajath.shared.model.WearStop;
 import com.rrajath.transittracker.TransitTrackerApplication;
 import com.rrajath.transittracker.network.StopsManager;
 import com.rrajath.transittracker.presenter.TransitTrackerServicePresenter;
@@ -41,7 +39,6 @@ public class TransitTrackerService extends WearableListenerService implements
     public static final String NEARBY_PATH = "/nearby";
     public static final String FAVORITES_PATH = "/favorites";
 
-    private Observable<ImmutableList<WearStop>> nearbyStopsForWear;
     private Location mLastLocation;
     private String nodeId;
 
