@@ -50,9 +50,9 @@ dependencies {
     compile rootProject.ext.timber
 
     // rxJava and rxAndroid
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'io.reactivex:rxandroid:0.24.0'
+    compile rootProject.ext.rxAndroid
+    compile rootProject.ext.rxJava
+    compile rootProject.ext.rxAndroid024
 
     // Networking
     compile ('com.squareup.retrofit2:retrofit:2.0.0-beta3') {

@@ -2,4 +2,6 @@
     <string name="app_name">Transit Tracker</string>
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
+    <string name="nearbyStopsMenuItem">Find stops near me</string>
+    <string name="starredStopsMenuItem">Starred stops</string>
 </resources>

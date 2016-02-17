@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.rrajath.transittracker.MainMenuListItemLayout
+<com.rrajath.transittracker.ui.MainMenuListItemLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="80dp">
 
     <TextView
         android:id="@+id/main_menu_item_name"
-        android:gravity="center"
-        android:paddingStart="15dp"
-        android:paddingEnd="0dp"
+        android:gravity="center_vertical|start"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="-4sp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
 
-</com.rrajath.transittracker.MainMenuListItemLayout>
+</com.rrajath.transittracker.ui.MainMenuListItemLayout>

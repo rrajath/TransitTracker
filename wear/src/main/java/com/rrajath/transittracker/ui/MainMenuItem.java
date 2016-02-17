@@ -1,4 +1,4 @@
-package com.rrajath.transittracker;
+package com.rrajath.transittracker.ui;
 
 /**
  * Created by rrajath on 11/9/15.
