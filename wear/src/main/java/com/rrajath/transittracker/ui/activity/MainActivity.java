@@ -1,4 +1,4 @@
-package com.rrajath.transittracker.ui;
+package com.rrajath.transittracker.ui.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,6 +17,9 @@ import com.rrajath.transittracker.BuildConfig;
 import com.rrajath.transittracker.R;
 import com.rrajath.transittracker.WearApplication;
 import com.rrajath.transittracker.di.module.MainActivityModule;
+import com.rrajath.transittracker.ui.MainMenuAdapter;
+import com.rrajath.transittracker.ui.MainMenuItem;
+import com.rrajath.transittracker.ui.presenter.MainActivityPresenter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,12 +40,16 @@ public class MainActivity extends Activity implements
         WearableListView.ClickListener,
         MessageApi.MessageListener {
 
+    private static final int NEARBY = 0;
+    private static final int STARRED = 1;
+
     @Inject
     GoogleApiClient mGoogleApiClient;
+    @Inject
+    MainActivityPresenter mPresenter;
 
     private WearableListView mainMenuList;
     private String nodeId;
-    private List<MainMenuItem> mainMenuItems;
     private static final String STOPS_LIST_PATH = "stopsList";
 
     @Override
@@ -86,7 +93,7 @@ public class MainActivity extends Activity implements
 
     // Load all items in the main menu into an adapter
     private void loadAdapter() {
-        mainMenuItems = new ArrayList<>();
+        List<MainMenuItem> mainMenuItems = new ArrayList<>();
         mainMenuItems.add(new MainMenuItem(
                 getString(R.string.nearbyStopsMenuItem), R.drawable.ic_my_location_green_500_24dp));
         mainMenuItems.add(new MainMenuItem(
@@ -142,10 +149,14 @@ public class MainActivity extends Activity implements
     @Override
     public void onClick(WearableListView.ViewHolder viewHolder) {
         Toast.makeText(MainActivity.this, "Clicked!", Toast.LENGTH_SHORT).show();
-        String path = "/" + mainMenuItems.get(viewHolder.getLayoutPosition()).title.toLowerCase();
-        Timber.d("PATH on wear: " + path);
-        // TODO: Replace this with more robust string mapping
-        sendToast("/nearby");
+        switch (viewHolder.getLayoutPosition()) {
+            case NEARBY:
+                mPresenter.onNearbyMenuItemClick();
+                break;
+            case STARRED:
+                mPresenter.onStarredMenuItemClick();
+                break;
+        }
     }
 
     @Override

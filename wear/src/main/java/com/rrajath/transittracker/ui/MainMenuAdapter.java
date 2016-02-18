@@ -35,8 +35,8 @@ public class MainMenuAdapter extends WearableListView.Adapter {
     public void onBindViewHolder(WearableListView.ViewHolder holder, int position) {
         MenuItemViewHolder viewHolder = (MenuItemViewHolder) holder;
         MainMenuItem mainMenuItem = mainMenuItems.get(position);
-        viewHolder.menuName.setText(mainMenuItem.title);
-        viewHolder.menuName.setCompoundDrawablesWithIntrinsicBounds(mainMenuItem.iconResource, 0, 0, 0);
+        viewHolder.menuName.setText(mainMenuItem.getTitle());
+        viewHolder.menuName.setCompoundDrawablesWithIntrinsicBounds(mainMenuItem.getIconResource(), 0, 0, 0);
         viewHolder.menuName.setCompoundDrawablePadding(15);
         viewHolder.itemView.setTag(position);
     }

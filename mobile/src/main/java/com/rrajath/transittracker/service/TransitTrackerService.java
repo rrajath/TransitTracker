@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
@@ -37,7 +36,7 @@ public class TransitTrackerService extends WearableListenerService implements
     GoogleApiClient mGoogleApiClient;
 
     public static final String NEARBY_PATH = "/nearby";
-    public static final String FAVORITES_PATH = "/favorites";
+    public static final String FAVORITES_PATH = "/starred";
 
     private Location mLastLocation;
     private String nodeId;
@@ -82,11 +81,6 @@ public class TransitTrackerService extends WearableListenerService implements
             Handler handler = new Handler(getMainLooper());
             handler.post(() -> Toast.makeText(TransitTrackerService.this, "Favorites clicked on wear", Toast.LENGTH_SHORT).show());
         }
-    }
-
-    @Override
-    public void onDataChanged(DataEventBuffer dataEvents) {
-        super.onDataChanged(dataEvents);
     }
 
     private void sendStopsToWear(byte[] data) {

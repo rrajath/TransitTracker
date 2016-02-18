@@ -1,8 +1,8 @@
 package com.rrajath.transittracker.di.module;
 
-import com.rrajath.transittracker.ui.MainActivity;
-
-import javax.inject.Singleton;
+import com.rrajath.transittracker.ui.ActivityScope;
+import com.rrajath.transittracker.ui.activity.MainActivity;
+import com.rrajath.transittracker.ui.presenter.MainActivityPresenter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -16,10 +16,14 @@ public class MainActivityModule {
     }
 
     @Provides
-    @Singleton
+    @ActivityScope
     public MainActivity providesMainActivity() {
         return mMainActivity;
     }
 
-
+    @Provides
+    @ActivityScope
+    public MainActivityPresenter providesMainActivityPresenter() {
+        return new MainActivityPresenter(mMainActivity);
+    }
 }
