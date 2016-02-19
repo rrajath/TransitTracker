@@ -15,7 +15,6 @@ import com.google.android.gms.wearable.WearableListenerService;
 import com.google.gson.Gson;
 import com.rrajath.transittracker.TransitTrackerApplication;
 import com.rrajath.transittracker.network.StopsManager;
-import com.rrajath.transittracker.presenter.TransitTrackerServicePresenter;
 import com.rrajath.transittracker.util.LocationUtils;
 
 import javax.inject.Inject;
@@ -26,8 +25,6 @@ import timber.log.Timber;
 public class TransitTrackerService extends WearableListenerService implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    @Inject
-    TransitTrackerServicePresenter presenter;
     @Inject
     StopsManager mStopsManager;
     @Inject
