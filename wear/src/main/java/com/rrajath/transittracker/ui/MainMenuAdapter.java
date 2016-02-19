@@ -11,9 +11,6 @@ import com.rrajath.transittracker.R;
 
 import java.util.List;
 
-/**
- * Created by rrajath on 11/9/15.
- */
 public class MainMenuAdapter extends WearableListView.Adapter {
 
     Context context;
