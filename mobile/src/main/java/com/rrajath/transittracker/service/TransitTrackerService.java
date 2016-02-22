@@ -103,8 +103,8 @@ public class TransitTrackerService extends WearableListenerService implements
     public void retrieveDeviceNode() {
         Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).setResultCallback(
                 getConnectedNodesResult -> Observable.from(getConnectedNodesResult.getNodes())
-                        .map(node1 -> nodeId = node1.getId())
-                        .subscribe(node -> Timber.d("NodeId: " + node))
+                        .map(node -> nodeId = node.getId())
+                        .subscribe(nodeId -> Timber.d("NodeId: " + nodeId))
         );
     }
 
