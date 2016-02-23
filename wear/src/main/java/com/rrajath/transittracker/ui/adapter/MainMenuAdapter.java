@@ -1,4 +1,4 @@
-package com.rrajath.transittracker.ui;
+package com.rrajath.transittracker.ui.adapter;
 
 import android.content.Context;
 import android.support.wearable.view.WearableListView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.rrajath.transittracker.R;
+import com.rrajath.transittracker.ui.MainMenuItem;
 
 import java.util.List;
 

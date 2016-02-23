@@ -1,6 +1,7 @@
 package com.rrajath.transittracker.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.wearable.view.WearableListView;
@@ -17,13 +18,9 @@ import com.rrajath.transittracker.BuildConfig;
 import com.rrajath.transittracker.R;
 import com.rrajath.transittracker.WearApplication;
 import com.rrajath.transittracker.di.module.MainActivityModule;
-import com.rrajath.transittracker.ui.MainMenuAdapter;
+import com.rrajath.transittracker.ui.adapter.MainMenuAdapter;
 import com.rrajath.transittracker.ui.MainMenuItem;
 import com.rrajath.transittracker.ui.presenter.MainActivityPresenter;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +46,7 @@ public class MainActivity extends Activity implements
     MainActivityPresenter mPresenter;
 
     private WearableListView mainMenuList;
+    private List<WearStop> mWearStops;
     private String nodeId;
     private static final String STOPS_LIST_PATH = "stopsList";
 
@@ -167,20 +165,14 @@ public class MainActivity extends Activity implements
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equals(STOPS_LIST_PATH)) {
-            byte[] bytes = messageEvent.getData();
-            try {
-                JSONArray jsonArray = new JSONArray(new String(bytes));
-                JSONObject jsonObject;
-                List<WearStop> wearStops = new ArrayList<>();
-                for (int i=0; i<jsonArray.length(); i++) {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    wearStops.add(WearStop.fromJSON(jsonObject));
-                }
-                Timber.d("Final WearStops List: " + wearStops.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            Toast.makeText(MainActivity.this, "Got the list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Got the nearby list", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, NearbyStopsListActivity.class);
+            intent.putExtra("stopsListJson", messageEvent.getData());
+            startActivity(intent);
+        } else {
+            Toast.makeText(MainActivity.this, "Got the fav list", Toast.LENGTH_SHORT).show();
+            // start new activity with this list
         }
     }
 
@@ -197,4 +189,9 @@ public class MainActivity extends Activity implements
             Toast.makeText(MainActivity.this, "No connected device found", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void setNearbyWearStops(List<WearStop> wearStops) {
+        mWearStops = wearStops;
+    }
+
 }
