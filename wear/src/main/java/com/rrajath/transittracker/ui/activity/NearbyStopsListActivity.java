@@ -35,13 +35,16 @@ public class NearbyStopsListActivity extends Activity {
 
         setContentView(R.layout.activity_nearby_stops);
 
+        byte[] stopsListJson = getIntent().getExtras().getByteArray("stopsListJson");
+        mPresenter.translateNearbyStopsList(stopsListJson);
+
         View view = findViewById(R.id.nearby_stops_box_inset_layout);
         view.setOnApplyWindowInsetsListener((view1, windowInsets) -> {
             lvNearbyStops = (WearableListView) view1.findViewById(R.id.lv_nearby_stops);
-            lvNearbyStops.setLayoutManager(new LinearLayoutManager(this));
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            linearLayoutManager.setReverseLayout(true);
+            lvNearbyStops.setLayoutManager(linearLayoutManager);
             loadAdapter();
-            String stopsListJson = NearbyStopsListActivity.this.getIntent().getStringExtra("stopsListJson");
-            mPresenter.translateNearbyStopsList(stopsListJson.getBytes());
             return windowInsets;
         });
 
