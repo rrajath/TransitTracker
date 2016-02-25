@@ -13,13 +13,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
-import com.rrajath.shared.model.WearStop;
 import com.rrajath.transittracker.BuildConfig;
 import com.rrajath.transittracker.R;
 import com.rrajath.transittracker.WearApplication;
 import com.rrajath.transittracker.di.module.MainActivityModule;
-import com.rrajath.transittracker.ui.adapter.MainMenuAdapter;
 import com.rrajath.transittracker.ui.MainMenuItem;
+import com.rrajath.transittracker.ui.adapter.MainMenuAdapter;
 import com.rrajath.transittracker.ui.presenter.MainActivityPresenter;
 
 import java.util.ArrayList;
@@ -46,7 +45,6 @@ public class MainActivity extends Activity implements
     MainActivityPresenter mPresenter;
 
     private WearableListView mainMenuList;
-    private List<WearStop> mWearStops;
     private String nodeId;
     private static final String STOPS_LIST_PATH = "stopsList";
 
@@ -178,20 +176,13 @@ public class MainActivity extends Activity implements
 
     public void sendToast(final String path) {
         if (nodeId != null) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    mGoogleApiClient.blockingConnect(30, TimeUnit.SECONDS);
-                    Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId, path, null);
-                }
+            // TODO: Remove blockingConnect() to something else
+            new Thread(() -> {
+                mGoogleApiClient.blockingConnect(30, TimeUnit.SECONDS);
+                Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId, path, null);
             }).start();
         } else {
             Toast.makeText(MainActivity.this, "No connected device found", Toast.LENGTH_SHORT).show();
         }
     }
-
-    public void setNearbyWearStops(List<WearStop> wearStops) {
-        mWearStops = wearStops;
-    }
-
 }

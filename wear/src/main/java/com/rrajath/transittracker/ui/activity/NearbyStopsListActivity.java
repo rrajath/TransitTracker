@@ -59,5 +59,4 @@ public class NearbyStopsListActivity extends Activity {
         mNearbyWearStops = nearbyWearStops;
     }
 
-
 }
