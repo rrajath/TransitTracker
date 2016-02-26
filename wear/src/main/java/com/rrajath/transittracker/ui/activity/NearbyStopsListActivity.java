@@ -47,7 +47,6 @@ public class NearbyStopsListActivity extends Activity {
             loadAdapter();
             return windowInsets;
         });
-
     }
 
     private void loadAdapter() {
