@@ -37,7 +37,7 @@ public class NearbyStopsAdapter extends RecyclerView.Adapter<NearbyStopsAdapter.
         return mWearStops.size();
     }
 
-    static class WearStopViewHolder extends RecyclerView.ViewHolder {
+    public static class WearStopViewHolder extends RecyclerView.ViewHolder {
         TextView direction;
         TextView stopName;
 

@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="80dp">
+              android:layout_height="40dp">
 
     <TextView
         android:id="@+id/direction"
         android:text="SB"
         android:gravity="center_vertical|start"
-        android:textColor="@color/white"
-        android:layout_marginEnd="8dp"
+        android:textColor="@color/black"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:fontFamily="sans-serif-condensed-light"
         android:textSize="16sp"
@@ -20,7 +20,8 @@
         android:id="@+id/stop_name"
         android:text="18th Ave / S Jackson St"
         android:gravity="center_vertical|start"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif-condensed-light"
         android:lineSpacingExtra="-4sp"
