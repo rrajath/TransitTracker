@@ -50,7 +50,7 @@ public class NearbyStopsListActivity extends Activity {
     }
 
     private void loadAdapter() {
-        mAdapter = new NearbyStopsAdapter(mNearbyWearStops);
+        mAdapter = new NearbyStopsAdapter(this, mNearbyWearStops);
         lvNearbyStops.setAdapter(mAdapter);
     }
 

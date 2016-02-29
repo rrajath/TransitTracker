@@ -1,6 +1,7 @@
 package com.rrajath.transittracker.ui.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
+import android.support.wearable.view.WearableListView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +12,29 @@ import com.rrajath.transittracker.R;
 
 import java.util.List;
 
-public class NearbyStopsAdapter extends RecyclerView.Adapter<NearbyStopsAdapter.WearStopViewHolder> {
+public class NearbyStopsAdapter extends WearableListView.Adapter {
 
+    Context mContext;
     List<WearStop> mWearStops;
+    LayoutInflater mLayoutInflater;
 
-    public NearbyStopsAdapter(List<WearStop> wearStops) {
+    public NearbyStopsAdapter(Context context, List<WearStop> wearStops) {
+        mContext = context;
+        mLayoutInflater = LayoutInflater.from(context);
         mWearStops = wearStops;
     }
 
     @Override
-    public WearStopViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.stop_item, parent, false);
-        return new WearStopViewHolder(view);
+    public WearableListView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new WearStopViewHolder(mLayoutInflater.inflate(R.layout.stop_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(WearStopViewHolder holder, int position) {
+    public void onBindViewHolder(WearableListView.ViewHolder holder, int position) {
+        WearStopViewHolder viewHolder = (WearStopViewHolder) holder;
         WearStop wearStop = mWearStops.get(position);
-        holder.direction.setText(wearStop.getDirection());
-        holder.stopName.setText(wearStop.getName());
+        viewHolder.direction.setText(wearStop.getDirection());
+        viewHolder.stopName.setText(wearStop.getName());
     }
 
     @Override
@@ -37,7 +42,7 @@ public class NearbyStopsAdapter extends RecyclerView.Adapter<NearbyStopsAdapter.
         return mWearStops.size();
     }
 
-    public static class WearStopViewHolder extends RecyclerView.ViewHolder {
+    public static class WearStopViewHolder extends WearableListView.ViewHolder {
         TextView direction;
         TextView stopName;
 
