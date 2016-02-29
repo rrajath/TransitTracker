@@ -5,6 +5,7 @@ import android.support.wearable.view.WearableListView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rrajath.shared.model.WearStop;
@@ -33,8 +34,23 @@ public class NearbyStopsAdapter extends WearableListView.Adapter {
     public void onBindViewHolder(WearableListView.ViewHolder holder, int position) {
         WearStopViewHolder viewHolder = (WearStopViewHolder) holder;
         WearStop wearStop = mWearStops.get(position);
-        viewHolder.direction.setText(wearStop.getDirection());
+        viewHolder.direction.setImageResource(getDirectionIcon(wearStop.getDirection()));
         viewHolder.stopName.setText(wearStop.getName());
+    }
+
+    private int getDirectionIcon(String direction) {
+        switch (direction) {
+            case "N":
+                return R.mipmap.ic_direction_n;
+            case "S":
+                return R.mipmap.ic_direction_s;
+            case "E":
+                return R.mipmap.ic_direction_e;
+            case "W":
+                return R.mipmap.ic_direction_w;
+            default:
+                return 0;
+        }
     }
 
     @Override
@@ -43,12 +59,12 @@ public class NearbyStopsAdapter extends WearableListView.Adapter {
     }
 
     public static class WearStopViewHolder extends WearableListView.ViewHolder {
-        TextView direction;
+        ImageView direction;
         TextView stopName;
 
         public WearStopViewHolder(View view) {
             super(view);
-            direction = (TextView) view.findViewById(R.id.direction);
+            direction = (ImageView) view.findViewById(R.id.direction_icon);
             stopName = (TextView) view.findViewById(R.id.stop_name);
         }
     }
