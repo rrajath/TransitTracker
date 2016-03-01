@@ -10,7 +10,7 @@
         android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif-condensed-light"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:lineSpacingExtra="-4sp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
