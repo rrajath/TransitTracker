@@ -144,7 +144,6 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onClick(WearableListView.ViewHolder viewHolder) {
-        Toast.makeText(MainActivity.this, "Clicked!", Toast.LENGTH_SHORT).show();
         switch (viewHolder.getLayoutPosition()) {
             case NEARBY:
                 mPresenter.onNearbyMenuItemClick();
@@ -163,8 +162,6 @@ public class MainActivity extends Activity implements
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equals(STOPS_LIST_PATH)) {
-            Toast.makeText(MainActivity.this, "Got the nearby list", Toast.LENGTH_SHORT).show();
-
             Intent intent = new Intent(this, NearbyStopsListActivity.class);
             intent.putExtra("stopsListJson", messageEvent.getData());
             startActivity(intent);
@@ -174,7 +171,7 @@ public class MainActivity extends Activity implements
         }
     }
 
-    public void sendToast(final String path) {
+    public void sendMessageToHandheld(final String path) {
         if (nodeId != null) {
             // TODO: Remove blockingConnect() to something else
             new Thread(() -> {

@@ -10,10 +10,10 @@ public class MainActivityPresenter {
     }
 
     public void onNearbyMenuItemClick() {
-        mMainActivity.sendToast("/nearby");
+        mMainActivity.sendMessageToHandheld("/nearby");
     }
 
     public void onStarredMenuItemClick() {
-        mMainActivity.sendToast("/starred");
+        mMainActivity.sendMessageToHandheld("/starred");
     }
 }
