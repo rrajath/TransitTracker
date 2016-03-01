@@ -36,6 +36,7 @@ public class NearbyStopsAdapter extends WearableListView.Adapter {
         WearStop wearStop = mWearStops.get(position);
         viewHolder.direction.setImageResource(getDirectionIcon(wearStop.getDirection()));
         viewHolder.stopName.setText(wearStop.getName());
+        viewHolder.stopName.setTag(position);
     }
 
     private int getDirectionIcon(String direction) {
@@ -76,5 +77,4 @@ public class NearbyStopsAdapter extends WearableListView.Adapter {
             stopName = (TextView) view.findViewById(R.id.stop_name);
         }
     }
-
 }
