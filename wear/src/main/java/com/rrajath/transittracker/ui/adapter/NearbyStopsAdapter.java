@@ -48,6 +48,14 @@ public class NearbyStopsAdapter extends WearableListView.Adapter {
                 return R.mipmap.ic_direction_e;
             case "W":
                 return R.mipmap.ic_direction_w;
+            case "NE":
+                return R.mipmap.ic_direction_ne;
+            case "NW":
+                return R.mipmap.ic_direction_nw;
+            case "SE":
+                return R.mipmap.ic_direction_se;
+            case "SW":
+                return R.mipmap.ic_direction_sw;
             default:
                 return 0;
         }

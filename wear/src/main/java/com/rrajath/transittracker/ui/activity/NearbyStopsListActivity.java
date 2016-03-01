@@ -42,7 +42,6 @@ public class NearbyStopsListActivity extends Activity {
         view.setOnApplyWindowInsetsListener((view1, windowInsets) -> {
             lvNearbyStops = (WearableListView) view1.findViewById(R.id.lv_nearby_stops);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            linearLayoutManager.setReverseLayout(true);
             lvNearbyStops.setLayoutManager(linearLayoutManager);
             loadAdapter();
             return windowInsets;
