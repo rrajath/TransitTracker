@@ -28,6 +28,9 @@ android {
             zipAlignEnabled false
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
