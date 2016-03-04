@@ -5,18 +5,20 @@ import com.rrajath.shared.model.WearStop;
 import com.rrajath.transittracker.data.api.model.Data;
 import com.rrajath.transittracker.data.api.model.Stop;
 import com.rrajath.transittracker.data.api.response.StopsForLocationOutput;
+import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.network.interfaces.OneBusAwayApiService;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class StopsManager {
     OneBusAwayApiService mOneBusAwayApiService;
+    AppLogger mAppLogger;
 
-    public StopsManager(OneBusAwayApiService oneBusAwayApiService) {
+    public StopsManager(OneBusAwayApiService oneBusAwayApiService, AppLogger appLogger) {
         this.mOneBusAwayApiService = oneBusAwayApiService;
+        this.mAppLogger = appLogger;
     }
 
     public Observable<ImmutableList<WearStop>> getStopsForLocation(final double latitude, final double longitude, final int radius) {
@@ -25,7 +27,7 @@ public class StopsManager {
                 .map(stopsForLocationOutput -> {
                     ImmutableList.Builder<WearStop> builder = ImmutableList.builder();
                     Data data = stopsForLocationOutput.data;
-                    Timber.d("List of stops: " + data.list.size());
+                    mAppLogger.d("List of stops: " + data.list.size());
                     for (Stop stop : data.list) {
                         WearStop wearStop = new WearStop(stop.name, stop.direction, stop.routeIds, stop.code);
 

@@ -14,13 +14,13 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.google.gson.Gson;
 import com.rrajath.transittracker.TransitTrackerApplication;
+import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.network.StopsManager;
 import com.rrajath.transittracker.util.LocationUtils;
 
 import javax.inject.Inject;
 
 import rx.Observable;
-import timber.log.Timber;
 
 public class TransitTrackerService extends WearableListenerService implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -31,6 +31,8 @@ public class TransitTrackerService extends WearableListenerService implements
     LocationUtils mLocationUtils;
     @Inject
     GoogleApiClient mGoogleApiClient;
+    @Inject
+    AppLogger mAppLogger;
 
     public static final String NEARBY_PATH = "/nearby";
     public static final String FAVORITES_PATH = "/starred";
@@ -43,9 +45,12 @@ public class TransitTrackerService extends WearableListenerService implements
         TransitTrackerApplication.get(this)
                 .createTransitTrackerServiceComponent(this)
                 .inject(this);
+
+        mAppLogger.d("Testing!");
+
         buildGoogleApiClient();
         retrieveDeviceNode();
-        Timber.d("Calling mLocationUtils.getCurrentLocation");
+        mAppLogger.d("Calling mLocationUtils.getCurrentLocation");
         mLastLocation = mLocationUtils.getCurrentLocation(this);
         super.onCreate();
     }
@@ -59,7 +64,7 @@ public class TransitTrackerService extends WearableListenerService implements
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equals(NEARBY_PATH)) {
-
+            mAppLogger.d("AppLogger working!");
             if (mLastLocation == null) {
                 mLastLocation = mLocationUtils.getCurrentLocation(this);
             }
@@ -68,7 +73,7 @@ public class TransitTrackerService extends WearableListenerService implements
                     .flatMap(location -> mStopsManager.getStopsForLocation(location.getLatitude(), location.getLongitude(), 150))
                     .map(wearStop -> {
                         String serializedJson = new Gson().toJson(wearStop);
-                        Timber.d(serializedJson);
+                        mAppLogger.d(serializedJson);
                         return serializedJson.getBytes();
                     })
                     .subscribe(this::sendStopsToWear);
@@ -86,25 +91,25 @@ public class TransitTrackerService extends WearableListenerService implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Timber.d("Connected");
+        mAppLogger.d("Connected");
         Wearable.DataApi.addListener(mGoogleApiClient, this);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Timber.d("Connection Suspended");
+        mAppLogger.d("Connection Suspended");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Timber.d(String.format("Connection Failed. Reason: %s", connectionResult.getErrorMessage()));
+        mAppLogger.d(String.format("Connection Failed. Reason: %s", connectionResult.getErrorMessage()));
     }
 
     public void retrieveDeviceNode() {
         Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).setResultCallback(
                 getConnectedNodesResult -> Observable.from(getConnectedNodesResult.getNodes())
                         .map(node -> nodeId = node.getId())
-                        .subscribe(nodeId -> Timber.d("NodeId: " + nodeId))
+                        .subscribe(nodeId -> mAppLogger.d("NodeId: " + nodeId))
         );
     }
 

@@ -7,6 +7,7 @@ import android.location.LocationManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.wearable.Wearable;
+import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.util.LocationUtils;
 
 import javax.inject.Singleton;
@@ -30,8 +31,10 @@ public class AppModule {
 
     @Provides
     @Singleton
-    LocationUtils providesLocationUtils(GoogleApiClient googleApiClient, LocationManager locationManager) {
-        return new LocationUtils(googleApiClient, locationManager);
+    LocationUtils providesLocationUtils(GoogleApiClient googleApiClient,
+                                        LocationManager locationManager,
+                                        AppLogger appLogger) {
+        return new LocationUtils(googleApiClient, locationManager, appLogger);
     }
 
     @Provides
@@ -53,5 +56,11 @@ public class AppModule {
     @Singleton
     Context providesApplicationContext() {
         return application.getApplicationContext();
+    }
+
+    @Provides
+    @Singleton
+    AppLogger providesAppLogger() {
+        return new AppLogger(application);
     }
 }

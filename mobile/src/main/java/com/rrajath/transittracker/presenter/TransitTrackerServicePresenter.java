@@ -2,21 +2,24 @@ package com.rrajath.transittracker.presenter;
 
 import com.google.common.collect.ImmutableList;
 import com.rrajath.shared.model.WearStop;
+import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.network.StopsManager;
 import com.rrajath.transittracker.service.TransitTrackerService;
 import com.rrajath.transittracker.util.SimpleObserver;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class TransitTrackerServicePresenter {
     TransitTrackerService service;
     StopsManager mStopsManager;
+    AppLogger mAppLogger;
 
-    public TransitTrackerServicePresenter(TransitTrackerService service, StopsManager stopsManager) {
+    public TransitTrackerServicePresenter(TransitTrackerService service, StopsManager stopsManager,
+                                          AppLogger appLogger) {
         this.service = service;
         this.mStopsManager = stopsManager;
+        this.mAppLogger = appLogger;
     }
 
     public void handleOnGetStopsForLocation() {
@@ -27,13 +30,13 @@ public class TransitTrackerServicePresenter {
                     @Override
                     public void onNext(ImmutableList<WearStop> wearStops) {
                         super.onNext(wearStops);
-                        Timber.d("Number of wearStops returned: " + wearStops.size());
+                        mAppLogger.d("Number of wearStops returned: " + wearStops.size());
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        Timber.d("Error occurred: " + e.getMessage());
+                        mAppLogger.e("Error occurred: " + e.getMessage());
                     }
                 });
     }

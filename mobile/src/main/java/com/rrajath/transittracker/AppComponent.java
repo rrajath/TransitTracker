@@ -3,6 +3,7 @@ package com.rrajath.transittracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.rrajath.transittracker.di.module.NetworkModule;
 import com.rrajath.transittracker.di.module.OneBusAwayApiModule;
+import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.network.StopsManager;
 import com.rrajath.transittracker.util.LocationUtils;
 
@@ -24,4 +25,5 @@ public interface AppComponent {
     StopsManager stopsManager();
     LocationUtils locationUtils();
     GoogleApiClient googleApiClient();
+    AppLogger appLogger();
 }
