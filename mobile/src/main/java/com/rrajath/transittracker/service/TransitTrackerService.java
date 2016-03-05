@@ -46,8 +46,6 @@ public class TransitTrackerService extends WearableListenerService implements
                 .createTransitTrackerServiceComponent(this)
                 .inject(this);
 
-        mAppLogger.d("Testing!");
-
         buildGoogleApiClient();
         retrieveDeviceNode();
         mAppLogger.d("Calling mLocationUtils.getCurrentLocation");
@@ -64,7 +62,6 @@ public class TransitTrackerService extends WearableListenerService implements
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equals(NEARBY_PATH)) {
-            mAppLogger.d("AppLogger working!");
             if (mLastLocation == null) {
                 mLastLocation = mLocationUtils.getCurrentLocation(this);
             }
