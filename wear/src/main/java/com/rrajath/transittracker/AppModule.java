@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Wearable;
+import com.rrajath.transittracker.logging.AppLogger;
 
 import javax.inject.Singleton;
 
@@ -39,4 +40,9 @@ public class AppModule {
         return application.getApplicationContext();
     }
 
+    @Provides
+    @Singleton
+    AppLogger providesAppLogger() {
+        return new AppLogger(application);
+    }
 }

@@ -13,10 +13,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
-import com.rrajath.transittracker.BuildConfig;
 import com.rrajath.transittracker.R;
 import com.rrajath.transittracker.WearApplication;
 import com.rrajath.transittracker.di.module.MainActivityModule;
+import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.ui.MainMenuItem;
 import com.rrajath.transittracker.ui.adapter.MainMenuAdapter;
 import com.rrajath.transittracker.ui.presenter.MainActivityPresenter;
@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import rx.Observable;
-import timber.log.Timber;
 
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -43,6 +42,8 @@ public class MainActivity extends Activity implements
     GoogleApiClient mGoogleApiClient;
     @Inject
     MainActivityPresenter mPresenter;
+    @Inject
+    AppLogger mAppLogger;
 
     private WearableListView mainMenuList;
     private String nodeId;
@@ -59,9 +60,6 @@ public class MainActivity extends Activity implements
 
         buildGoogleApiClient();
         retrieveDeviceNode();
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        }
 
         View view = findViewById(R.id.box_inset_layout);
         view.setOnApplyWindowInsetsListener((view1, windowInsets) -> {
@@ -83,7 +81,7 @@ public class MainActivity extends Activity implements
         Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).setResultCallback(
                 getConnectedNodesResult -> Observable.from(getConnectedNodesResult.getNodes())
                         .map(node -> nodeId = node.getId())
-                        .subscribe(nodeId -> Timber.d("NodeId: " + nodeId))
+                        .subscribe(nodeId -> mAppLogger.d("NodeId: " + nodeId))
         );
     }
 
@@ -134,12 +132,12 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Timber.d("onConnectionSuspended: connection to Google API Client was suspended");
+        mAppLogger.d("onConnectionSuspended: connection to Google API Client was suspended");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Timber.d(String.format("connection to Google API Client failed: %s", connectionResult.getErrorMessage()));
+        mAppLogger.d(String.format("connection to Google API Client failed: %s", connectionResult.getErrorMessage()));
     }
 
     @Override
