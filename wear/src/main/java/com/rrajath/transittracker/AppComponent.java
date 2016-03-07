@@ -5,6 +5,7 @@ import com.rrajath.transittracker.di.component.MainActivityComponent;
 import com.rrajath.transittracker.di.component.NearbyStopsListActivityComponent;
 import com.rrajath.transittracker.di.module.MainActivityModule;
 import com.rrajath.transittracker.di.module.NearbyStopsListActivityModule;
+import com.rrajath.transittracker.logging.AppLogger;
 
 import javax.inject.Singleton;
 
@@ -20,4 +21,5 @@ public interface AppComponent {
     NearbyStopsListActivityComponent plus(NearbyStopsListActivityModule nearbyStopsListActivityModule);
 
     GoogleApiClient googleApiClient();
+    AppLogger appLogger();
 }
