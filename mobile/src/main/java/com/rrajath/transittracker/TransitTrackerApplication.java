@@ -7,13 +7,11 @@ import com.rrajath.transittracker.di.component.DaggerTransitTrackerServiceCompon
 import com.rrajath.transittracker.di.component.TransitTrackerServiceComponent;
 import com.rrajath.transittracker.di.module.NetworkModule;
 import com.rrajath.transittracker.di.module.TransitTrackerServiceModule;
-import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.service.TransitTrackerService;
 
 public class TransitTrackerApplication extends Application {
 
     AppComponent mAppComponent;
-    AppLogger mAppLogger;
 
     private static final String ONEBUSAWAY_API_ENDPOINT = "http://api.pugetsound.onebusaway.org";
     public static final int USER_PERMISSION_LOCATION = 1;
