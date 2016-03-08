@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.rrajath.transittracker.R;
 
 public class NearbyStopListItemLayout extends LinearLayout implements WearableListView.OnCenterProximityListener {
+
     private TextView nearbyStopName;
 
     public NearbyStopListItemLayout(Context context) {

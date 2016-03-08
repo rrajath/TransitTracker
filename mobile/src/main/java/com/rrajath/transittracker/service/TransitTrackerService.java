@@ -36,6 +36,7 @@ public class TransitTrackerService extends WearableListenerService implements
 
     public static final String NEARBY_PATH = "/nearby";
     public static final String FAVORITES_PATH = "/starred";
+    public static final String ARRIVALS_FOR_STOP_PATH = "/arrivalsForStop";
 
     private Location mLastLocation;
     private String nodeId;
@@ -61,24 +62,32 @@ public class TransitTrackerService extends WearableListenerService implements
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if (messageEvent.getPath().equals(NEARBY_PATH)) {
-            if (mLastLocation == null) {
-                mLastLocation = mLocationUtils.getCurrentLocation(this);
+        switch (messageEvent.getPath()) {
+            case NEARBY_PATH:
+                if (mLastLocation == null) {
+                    mLastLocation = mLocationUtils.getCurrentLocation(this);
+                }
+
+                Observable.just(mLocationUtils.getCurrentLocation(this))
+                        .flatMap(location -> mStopsManager.getStopsForLocation(location.getLatitude(), location.getLongitude(), 150))
+                        .map(wearStop -> {
+                            String serializedJson = new Gson().toJson(wearStop);
+                            mAppLogger.d(serializedJson);
+                            return serializedJson.getBytes();
+                        })
+                        .subscribe(this::sendStopsToWear);
+                break;
+
+            case FAVORITES_PATH: {
+                Handler handler = new Handler(getMainLooper());
+                handler.post(() -> Toast.makeText(TransitTrackerService.this, "Favorites clicked on wear", Toast.LENGTH_SHORT).show());
+                break;
             }
-
-            Observable.just(mLocationUtils.getCurrentLocation(this))
-                    .flatMap(location -> mStopsManager.getStopsForLocation(location.getLatitude(), location.getLongitude(), 150))
-                    .map(wearStop -> {
-                        String serializedJson = new Gson().toJson(wearStop);
-                        mAppLogger.d(serializedJson);
-                        return serializedJson.getBytes();
-                    })
-                    .subscribe(this::sendStopsToWear);
-        }
-
-        if (messageEvent.getPath().equals(FAVORITES_PATH)) {
-            Handler handler = new Handler(getMainLooper());
-            handler.post(() -> Toast.makeText(TransitTrackerService.this, "Favorites clicked on wear", Toast.LENGTH_SHORT).show());
+            case ARRIVALS_FOR_STOP_PATH: {
+                Handler handler = new Handler(getMainLooper());
+                handler.post(() -> Toast.makeText(TransitTrackerService.this, "Arrivals for Path", Toast.LENGTH_SHORT).show());
+                break;
+            }
         }
     }
 
