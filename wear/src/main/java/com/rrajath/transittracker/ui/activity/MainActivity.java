@@ -13,6 +13,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
+import com.rrajath.shared.util.Constants;
 import com.rrajath.transittracker.R;
 import com.rrajath.transittracker.WearApplication;
 import com.rrajath.transittracker.di.module.MainActivityModule;
@@ -47,7 +48,6 @@ public class MainActivity extends Activity implements
 
     private WearableListView mainMenuList;
     private String nodeId;
-    private static final String STOPS_LIST_PATH = "stopsList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,11 +159,11 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if (messageEvent.getPath().equals(STOPS_LIST_PATH)) {
+        if (messageEvent.getPath().equals(Constants.STOPS_LIST_PATH)) {
             Intent intent = new Intent(this, NearbyStopsListActivity.class);
             intent.putExtra("stopsListJson", messageEvent.getData());
             startActivity(intent);
-        } else {
+        } else if (messageEvent.getPath().equals(Constants.FAVORITES_PATH)){
             Toast.makeText(MainActivity.this, "Got the fav list", Toast.LENGTH_SHORT).show();
             // start new activity with this list
         }

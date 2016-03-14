@@ -20,5 +20,8 @@ public class Data {
     @SerializedName("references")
     @Expose
     public References references;
+    @SerializedName("entry")
+    @Expose
+    public Entry entry;
 
 }

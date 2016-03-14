@@ -32,9 +32,8 @@ public class AppModule {
     @Provides
     @Singleton
     LocationUtils providesLocationUtils(GoogleApiClient googleApiClient,
-                                        LocationManager locationManager,
-                                        AppLogger appLogger) {
-        return new LocationUtils(googleApiClient, locationManager, appLogger);
+                                        LocationManager locationManager) {
+        return new LocationUtils(googleApiClient, locationManager);
     }
 
     @Provides
@@ -61,6 +60,6 @@ public class AppModule {
     @Provides
     @Singleton
     AppLogger providesAppLogger() {
-        return new AppLogger(application);
+        return new AppLogger();
     }
 }

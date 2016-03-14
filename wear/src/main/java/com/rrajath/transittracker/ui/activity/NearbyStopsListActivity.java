@@ -13,6 +13,7 @@ import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.rrajath.shared.model.WearStop;
+import com.rrajath.shared.util.Constants;
 import com.rrajath.transittracker.R;
 import com.rrajath.transittracker.WearApplication;
 import com.rrajath.transittracker.di.module.NearbyStopsListActivityModule;
@@ -153,7 +154,10 @@ public class NearbyStopsListActivity extends Activity implements
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-
+        if (messageEvent.getPath().equals(Constants.STOP_SCHEDULES_PATH)) {
+            mAppLogger.d(new String(messageEvent.getData()));
+            Toast.makeText(NearbyStopsListActivity.this, "Yes!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void sendMessageToHandheld(String path, String stopCode) {

@@ -1,6 +1,5 @@
 package com.rrajath.transittracker.di.module;
 
-import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.network.StopsManager;
 import com.rrajath.transittracker.network.interfaces.OneBusAwayApiService;
 
@@ -15,8 +14,8 @@ public class OneBusAwayApiModule {
 
     @Singleton
     @Provides
-    StopsManager provideStopsManager(OneBusAwayApiService oneBusAwayApiService, AppLogger appLogger) {
-        return new StopsManager(oneBusAwayApiService, appLogger);
+    StopsManager provideStopsManager(OneBusAwayApiService oneBusAwayApiService) {
+        return new StopsManager(oneBusAwayApiService);
     }
 
     @Singleton

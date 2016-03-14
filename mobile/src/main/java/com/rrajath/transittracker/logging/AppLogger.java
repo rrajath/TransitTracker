@@ -1,19 +1,11 @@
 package com.rrajath.transittracker.logging;
 
-import android.app.Application;
-
-import com.rrajath.shared.BuildConfig;
-
 import timber.log.Timber;
 
 public class AppLogger {
-    Application mApplication;
 
-    public AppLogger(Application application) {
-        mApplication = application;
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        }
+    public AppLogger() {
+        Timber.plant(new Timber.DebugTree());
     }
 
     public void d(String message) {

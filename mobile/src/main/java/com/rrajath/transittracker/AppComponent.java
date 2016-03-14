@@ -20,8 +20,6 @@ import dagger.Component;
         }
 )
 public interface AppComponent {
-//    TransitTrackerServiceComponent plus(TransitTrackerServiceModule transitTrackerServiceModule);
-//    OneBusAwayApiComponent plus(OneBusAwayApiModule oneBusAwayApiModule);
     StopsManager stopsManager();
     LocationUtils locationUtils();
     GoogleApiClient googleApiClient();
