@@ -9,6 +9,8 @@ import com.rrajath.transittracker.di.module.NetworkModule;
 import com.rrajath.transittracker.di.module.TransitTrackerServiceModule;
 import com.rrajath.transittracker.service.TransitTrackerService;
 
+import timber.log.Timber;
+
 public class TransitTrackerApplication extends Application {
 
     AppComponent mAppComponent;
@@ -19,6 +21,10 @@ public class TransitTrackerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
 
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))

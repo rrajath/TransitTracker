@@ -15,7 +15,6 @@ import com.google.android.gms.wearable.WearableListenerService;
 import com.google.gson.Gson;
 import com.rrajath.shared.util.Constants;
 import com.rrajath.transittracker.TransitTrackerApplication;
-import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.network.StopsManager;
 import com.rrajath.transittracker.util.LocationUtils;
 
@@ -33,8 +32,6 @@ public class TransitTrackerService extends WearableListenerService implements
     LocationUtils mLocationUtils;
     @Inject
     GoogleApiClient mGoogleApiClient;
-    @Inject
-    AppLogger mAppLogger;
 
     private Location mLastLocation;
     private String nodeId;
@@ -47,7 +44,6 @@ public class TransitTrackerService extends WearableListenerService implements
 
         buildGoogleApiClient();
         retrieveDeviceNode();
-        mAppLogger.d("Working?");
         mLastLocation = mLocationUtils.getCurrentLocation(this);
         super.onCreate();
     }

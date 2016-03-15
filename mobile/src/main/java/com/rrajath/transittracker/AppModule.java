@@ -7,7 +7,6 @@ import android.location.LocationManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.wearable.Wearable;
-import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.util.LocationUtils;
 
 import javax.inject.Singleton;
@@ -55,11 +54,5 @@ public class AppModule {
     @Singleton
     Context providesApplicationContext() {
         return application.getApplicationContext();
-    }
-
-    @Provides
-    @Singleton
-    AppLogger providesAppLogger() {
-        return new AppLogger();
     }
 }
