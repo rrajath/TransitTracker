@@ -17,7 +17,6 @@ import com.rrajath.shared.util.Constants;
 import com.rrajath.transittracker.R;
 import com.rrajath.transittracker.WearApplication;
 import com.rrajath.transittracker.di.module.MainActivityModule;
-import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.ui.MainMenuItem;
 import com.rrajath.transittracker.ui.adapter.MainMenuAdapter;
 import com.rrajath.transittracker.ui.presenter.MainActivityPresenter;
@@ -29,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import rx.Observable;
+import timber.log.Timber;
 
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -43,8 +43,6 @@ public class MainActivity extends Activity implements
     GoogleApiClient mGoogleApiClient;
     @Inject
     MainActivityPresenter mPresenter;
-    @Inject
-    AppLogger mAppLogger;
 
     private WearableListView mainMenuList;
     private String nodeId;
@@ -81,7 +79,7 @@ public class MainActivity extends Activity implements
         Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).setResultCallback(
                 getConnectedNodesResult -> Observable.from(getConnectedNodesResult.getNodes())
                         .map(node -> nodeId = node.getId())
-                        .subscribe(nodeId -> mAppLogger.d("NodeId: " + nodeId))
+                        .subscribe(nodeId -> Timber.d("NodeId: " + nodeId))
         );
     }
 
@@ -132,12 +130,12 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        mAppLogger.d("onConnectionSuspended: connection to Google API Client was suspended");
+        Timber.d("onConnectionSuspended: connection to Google API Client was suspended");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mAppLogger.d(String.format("connection to Google API Client failed: %s", connectionResult.getErrorMessage()));
+        Timber.d(String.format("connection to Google API Client failed: %s", connectionResult.getErrorMessage()));
     }
 
     @Override

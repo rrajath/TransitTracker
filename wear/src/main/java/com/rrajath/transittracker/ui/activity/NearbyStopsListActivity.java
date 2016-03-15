@@ -17,7 +17,6 @@ import com.rrajath.shared.util.Constants;
 import com.rrajath.transittracker.R;
 import com.rrajath.transittracker.WearApplication;
 import com.rrajath.transittracker.di.module.NearbyStopsListActivityModule;
-import com.rrajath.transittracker.logging.AppLogger;
 import com.rrajath.transittracker.ui.adapter.NearbyStopsAdapter;
 import com.rrajath.transittracker.ui.presenter.NearbyStopsListActivityPresenter;
 
@@ -27,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import rx.Observable;
+import timber.log.Timber;
 
 public class NearbyStopsListActivity extends Activity implements
         WearableListView.ClickListener,
@@ -40,8 +40,6 @@ public class NearbyStopsListActivity extends Activity implements
     NearbyStopsListActivityPresenter mPresenter;
     @Inject
     GoogleApiClient mGoogleApiClient;
-    @Inject
-    AppLogger mAppLogger;
 
     WearableListView lvNearbyStops;
     private NearbyStopsAdapter mAdapter;
@@ -106,7 +104,7 @@ public class NearbyStopsListActivity extends Activity implements
         Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).setResultCallback(
                 getConnectedNodesResult -> Observable.from(getConnectedNodesResult.getNodes())
                         .map(node -> nodeId = node.getId())
-                        .subscribe(nodeId -> mAppLogger.d("NodeId: " + nodeId))
+                        .subscribe(nodeId -> Timber.d("NodeId: " + nodeId))
         );
     }
 
@@ -117,12 +115,12 @@ public class NearbyStopsListActivity extends Activity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        mAppLogger.d("onConnectionSuspended: connection to Google API Client was suspended");
+        Timber.d("onConnectionSuspended: connection to Google API Client was suspended");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mAppLogger.d(String.format("connection to Google API Client failed: %s", connectionResult.getErrorMessage()));
+        Timber.d(String.format("connection to Google API Client failed: %s", connectionResult.getErrorMessage()));
     }
 
     @Override
@@ -155,7 +153,7 @@ public class NearbyStopsListActivity extends Activity implements
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equals(Constants.STOP_SCHEDULES_PATH)) {
-            mAppLogger.d(new String(messageEvent.getData()));
+            Timber.d(new String(messageEvent.getData()));
             Toast.makeText(NearbyStopsListActivity.this, "Yes!", Toast.LENGTH_SHORT).show();
         }
     }
