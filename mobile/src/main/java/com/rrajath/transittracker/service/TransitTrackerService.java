@@ -82,8 +82,8 @@ public class TransitTrackerService extends WearableListenerService implements
                 Timber.d("Reached Arrivals for stop");
                 Observable.just(mStopsManager.getArrivalsAndDeparturesForStop(stopId))
                         .map(wearStopSchedule -> {
-
                             String serializedJson = new Gson().toJson(wearStopSchedule);
+                            Timber.d("Serialized JSON: " + serializedJson);
                             return serializedJson.getBytes();
                         })
                         .subscribe(data -> sendDataToWear(Constants.STOP_SCHEDULES_PATH, data));
