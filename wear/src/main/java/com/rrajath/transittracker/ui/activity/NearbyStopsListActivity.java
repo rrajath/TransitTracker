@@ -2,6 +2,8 @@ package com.rrajath.transittracker.ui.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.wearable.view.WearableListView;
 import android.view.View;
@@ -21,7 +23,6 @@ import com.rrajath.transittracker.ui.adapter.NearbyStopsAdapter;
 import com.rrajath.transittracker.ui.presenter.NearbyStopsListActivityPresenter;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -91,7 +92,7 @@ public class NearbyStopsListActivity extends Activity implements
         WearStop wearStop = mNearbyWearStops.get(viewHolder.getLayoutPosition());
         Toast.makeText(NearbyStopsListActivity.this, mNearbyWearStops.get(viewHolder.getLayoutPosition()).getName(), Toast.LENGTH_SHORT).show();
         // send stop code to service on handheld
-        sendMessageToHandheld(ARRIVALS_FOR_STOP_PATH, wearStop.getCode());
+        sendMessageToHandheld(ARRIVALS_FOR_STOP_PATH, String.format("1_%s", wearStop.getCode()));
     }
 
     @Override
@@ -153,17 +154,15 @@ public class NearbyStopsListActivity extends Activity implements
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equals(Constants.STOP_SCHEDULES_PATH)) {
-            Timber.d(new String(messageEvent.getData()));
+            Timber.d("Stop Schedules JSON: " + new String(messageEvent.getData()));
             Toast.makeText(NearbyStopsListActivity.this, "Yes!", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void sendMessageToHandheld(String path, String stopCode) {
         if (nodeId != null) {
-            new Thread(() -> {
-                mGoogleApiClient.blockingConnect(30, TimeUnit.SECONDS);
-                Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId, path, stopCode.getBytes());
-            }).start();
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId, path, stopCode.getBytes()));
         } else {
             Toast.makeText(NearbyStopsListActivity.this, "No connected device found", Toast.LENGTH_SHORT).show();
         }

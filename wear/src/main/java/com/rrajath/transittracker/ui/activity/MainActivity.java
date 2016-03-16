@@ -3,6 +3,8 @@ package com.rrajath.transittracker.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.wearable.view.WearableListView;
 import android.view.View;
@@ -23,7 +25,6 @@ import com.rrajath.transittracker.ui.presenter.MainActivityPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -169,11 +170,8 @@ public class MainActivity extends Activity implements
 
     public void sendMessageToHandheld(final String path) {
         if (nodeId != null) {
-            // TODO: Remove blockingConnect() to something else
-            new Thread(() -> {
-                mGoogleApiClient.blockingConnect(30, TimeUnit.SECONDS);
-                Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId, path, null);
-            }).start();
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId, path, null));
         } else {
             Toast.makeText(MainActivity.this, "No connected device found", Toast.LENGTH_SHORT).show();
         }
